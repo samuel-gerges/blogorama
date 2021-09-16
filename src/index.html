@@ -1,0 +1,229 @@
+<!DOCTYPE HTML>
+
+<head>
+
+    <meta charset="UTF-8">
+    <title>Blogorama</title>
+    <script src="http://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="script/indexQ.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <link href="css/index.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="shortcut icon" href="#">
+
+</head>
+
+<body>
+
+    <div class="main" id="app">
+
+        <div class="loginspace">
+            <a href="index.html">
+                <img title="HOME" class="iconimg" src="images/msg1.png" alt="Image non disponible">
+            </a>
+
+            <button v-show="!this.globals.connected" title="Créer un compte" class="btn" v-on:click="showform2" id="signupbtn">S'inscrire</button>
+            <button v-show="!this.globals.connected" title="Se connecter" class="btn" v-on:click="showform1" id="loginbtn">Connexion</button>
+
+            <img class="avatarC" title="edit" v-show="showAVATAR" v-on:click="editEvent()" src="images/merged2.png" alt="avatarC">
+        </div>
+
+        <div class="navbar" v-on:click="closeForm">
+
+            <form class="searchform">
+                <div class="wapol">
+                    <input class="searchinput" name="search1" id="search" type="search" v-model="search1" placeholder="Rechercher par @..." autofocus required />
+                </div>
+
+                <img class="searchimg" title="S3ARCH" src="images/search5.png" alt="AVS" name="" v-on:click="findEvent1()">
+            </form>
+
+            <form class="searchform2">
+
+                <div class="wapol">
+                    <input class="searchinput" name="search2" id="search" type="search" v-model="search2" placeholder="Rechercher par #..." autofocus required />
+                </div>
+
+                <img class="searchimg" v-on:click="findEvent2()" title="S3ARCH" src="images/search5.png" alt="AVS" name="">
+            </form>
+        </div>
+
+
+        <div class="divchangeavatar animate" v-show="showEditAvatar">
+
+            <div class="changeavatarheader">
+                <p class="changeavatartxt"> CHOISIS UN AVATAR </p>
+                <img title="cancel" class="cancelpdp" src="images/cancel.png" v-on:click="showEditAvatar=false" alt="image non disponible">
+            </div>
+
+            <div class="changeavatarchoice">
+
+                <img id="av1" class="grpchoice" :class="funcfunc3" v-on:click="select($event)" src="images/avatar/avatar1.png" alt="av1">
+                <img id="av2" class="grpchoice" :class="funcfunc3" v-on:click="select($event)" src="images/avatar/avatar15.png" alt="av2">
+                <img id="av3" class="grpchoice" :class="funcfunc3" v-on:click="select($event)" src="images/avatar/avatar3.png" alt="av3">
+                <img id="av4" class="grpchoice" :class="funcfunc3" v-on:click="select($event)" src="images/avatar/avatar4.png" alt="av4">
+                <img id="av5" class="grpchoice" :class="funcfunc3" v-on:click="select($event)" src="images/avatar/avatar16.png" alt="av5">
+                <img id="av6" class="grpchoice" :class="funcfunc3" v-on:click="select($event)" src="images/avatar/avatar6.png" alt="av6">
+                <img id="av7" class="grpchoice" :class="funcfunc3" v-on:click="select($event)" src="images/avatar/avatar7.png" alt="av7">
+                <img id="av8" class="grpchoice" :class="funcfunc3" v-on:click="select($event)" src="images/avatar/avatar18.png" alt="av8">
+                <img id="av9" class="grpchoice" :class="funcfunc3" v-on:click="select($event)" src="images/avatar/avatar9.png" alt="av9">
+                <img id="av10" class="grpchoice" :class="funcfunc3" v-on:click="select($event)" src="images/avatar/avatar10.png" alt="av10">
+                <img id="av11" class="grpchoice" :class="funcfunc3" v-on:click="select($event)" src="images/avatar/avatar11.png" alt="av11">
+                <img id="av12" class="grpchoice" :class="funcfunc3" v-on:click="select($event)" src="images/avatar/avatar12.png" alt="av12">
+                <img id="av13" class="grpchoice" :class="funcfunc3" v-on:click="select($event)" src="images/avatar/avatar13.png" alt="av13">
+                <img id="av14" class="grpchoice" :class="funcfunc3" v-on:click="select($event)" src="images/avatar/avatar14.png" alt="av14">
+
+            </div>
+
+            <div>
+                <button class="sendnewpdp" v-on:click="subPdp">CHOISIR</button>
+            </div>
+        </div>
+
+
+        <div class="formarea3 animate" v-show="showEditProfile">
+
+            <h3 class="logintitle2">Editer profil</h3>
+            <img title="cancel" class="cancelimg2" src="images/cancel.png" v-on:click="showEditProfile=false" alt="image non disponible">
+
+            <p v-show="showEditError" class="logerror1">{{ErrorEditValue}}</p>
+
+            <input type="text" name="newpseudo" v-model="usernameEdit" placeholder="Nouveau Pseudo" required> <br>
+            <input type="password" name="newmdp" v-model="passwordEdit" placeholder="Nouveau mot de passe" required> <br>
+            <input type="password" name="newmdpc" v-model="passwordEditConf" placeholder="Confirmation mot de passe" required> <br><br>
+            <button title="Editer" class="subbtn3" type="submit" v-on:click.prevent="editUser">Enregistrer les modifications</button>
+
+            <br><br><br>
+        </div>
+
+        <div class="divedit" v-show="showEdit">
+
+            <div class="editheader">
+                <img class="edituserimg" v-bind:src="this.globals.pdp" alt="PDP">
+                <span style="text-transform: uppercase; font-size:0.8em; ">{{usernameConnection}}</span>
+                <hr class="lineedit">
+            </div>
+
+            <div class="editmain">
+
+                <p class="linkedit editPROFIL" v-on:click="changeProfileEvent">Changer Profil</p>
+                <p class="linkedit editIMG" v-on:click="changeAvatarEvent">Changer Avatar</p>
+
+                <div class="theme-switch-wrapper">
+
+                    <label class="theme-switch" for="checkbox">
+                        <input type="checkbox" id="checkbox" />
+                        <div class="slider round"></div>
+                  </label>
+                </div>
+            </div>
+
+            <div class="editfoot">
+                <img title="Se déconnecter" v-on:click.prevent="disconnectUser" class="logoutimg" alt="deco" src="images/logout.png">
+            </div>
+        </div>
+
+        <!-- formulaire connexion  -->
+        <div class="formarea1 animate" id="logform" v-show="showFormLog">
+
+            <img class="userimg" src="images/user.png" alt="image non disponible">
+            <h3 class="logintitle1">Connexion</h3>
+            <img title="cancel" class="cancelimg1" src="images/cancel.png" v-on:click="closeForm" alt="image non disponible"><br>
+
+            <p v-show="showLogError" class="logerror1">{{ErrorLogValue}}</p>
+
+            <input type="text" v-on:keyup.enter="connectUser" name="pseudoemail" v-model="usernameConnection" placeholder="Email ou nom d 'utilisateur" required> <br>
+            <input class="inputmdp" type="password" v-on:keyup.enter="connectUser" name="password" v-model="passwordConnection" placeholder="Mot de passe" required>
+            <img class="eyeimg" title="Montrer/Masquer" src="images/eye2.png" alt="eye">
+
+            <button title="Se connecter" class="subbtn1" v-on:click.prevent="connectUser">Se connecter</button>
+
+            <div class="changeform">
+                <h4 class="go1">Pas de Compte ?</h4>
+                <h4 class="go2" v-on:click="showform2">S'inscrire</h4>
+            </div>
+        </div>
+
+        <!-- formulaire inscription  -->
+        <div class="formarea2 animate" id="signform" v-show="showFormSign">
+
+            <h3 class="logintitle2">Inscription</h3>
+            <img title="cancel" class="cancelimg2" src="images/cancel.png" v-on:click="closeForm" alt="image non disponible">
+
+            <p v-show="showSignError" class="logerror1">{{ErrorSignValue}}</p>
+
+            <input type="text" name="pseudo" v-on:keyup.enter="registerUser" v-model="usernameRegistration" placeholder="Pseudo" required> <br>
+            <input type="email" name="email" v-on:keyup.enter="registerUser" v-model="emailRegistration" placeholder="Email" required> <br>
+            <input type="password" name="mdp" v-on:keyup.enter="registerUser" v-model="passwordRegistration" placeholder="Mot de passe" required> <br>
+            <input type="password" name="mdpc" v-on:keyup.enter="registerUser" v-model="passwordRegistrationConf" placeholder="Confirmation mot de passe" required> <br>
+            <button title="S'inscrire" class="subbtn2" type="submit" v-on:click.prevent="registerUser">S'inscrire</button>
+
+            <div class="changeform">
+                <h4 class="go1bis">Déjà un compte ?</h4>
+                <h4 class="go2bis" v-on:click="showform1">Se connecter</h4>
+            </div>
+        </div>
+
+        <div class="boxsuccess" :class="funcfunc">
+            <span class="checkSucess"><i class="fa fa-check-circle" aria-hidden="true"></i> </span>
+            <span class="checkmsg">L'inscription a été effectué avec succès !</span>
+        </div>
+
+        <div class="boxerror" :class="funcfunc2">
+            <span class="checkError"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></i> </span>
+            <span class="checkmsg">Vous devez être connecté pour aimer , partager ou suivre !</span>
+        </div>
+
+        <div class="posts" v-on:click="closeForm" :class="disablefunction">
+
+            <div class="supsection1">
+                <div class="divfilter" v-show="showFILTER">
+
+                    <ul class="filtre">
+
+                        <li title="Publications avec mentions de l'utilisateur seulement"><input type="checkbox" v-model="checkbox2" id="checkbox2" value="mentions" v-on:click="displayUserTagged" checked><label for="checkbox2"> Mentions </label></li>
+                        <li title="Publications avec @everyone"><input type="checkbox" id="checkbox3" v-model="checkbox3" value="mentions_everyone" v-on:click="displayEveryoneTagged" checked><label for="checkbox3"> @everyone</label></li>
+                        <li title="Publications des abonnements"><input type="checkbox" id="checkbox5" value="abo" v-model="checkbox5" v-on:click="displayFollowing" checked><label for="checkbox5"> Abonnements</label></li>
+
+                    </ul>
+                </div>
+            </div>
+
+            <div class="supsection2">
+
+                <div class="divmsginput" v-show="showINPUT">
+                    <textarea class="msginput" name="message" v-model="messageToAdd" :placeholder="[[ mindtxt ]]"></textarea><br>
+                    <hr class="line">
+
+                    <p class="limitnb"></p>
+
+                    <input type="file" id="files" class="imginput" accept="image/*">
+
+                    <label for="files"> <img title="Insérer image" class="insertimg" src="images/insertimage.png"
+                            alt="ADD IMAGE"> </label>
+
+                    <button class="sendbtn" v-on:click.prevent="sendPostInfos">POST</button>
+                </div>
+
+                <br>
+            </div>
+
+            <div class="commentsection">
+
+                <div class="msgarea">
+                    <post v-for="post in posts" v-bind:key="post.pid" v-bind:descriptor="post" v-bind:globals="globals">
+
+                    </post>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script/indexVue.js"></script>
+
+</body>
+
+</html>
