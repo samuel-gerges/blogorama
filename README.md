@@ -1,7 +1,10 @@
+Le but de ce projet est de réaliser un site de micro-blogage inspiré de Twitter ou de Mastodon.
+
 # Auteurs
 
-Gerges Samuel (71804327)
-Jami Adam (71803537)
+Gerges Samuel
+
+Jami Adam
 
 # Architecture et fichiers
 
